@@ -13,6 +13,21 @@ describe UsersController do
             end
         end
         
+        describe "for admin users" do
+            
+            before(:each) do
+                admin = Factory(:user, :email => "admin@example.com", :admin => true)
+                test_sign_in(admin)
+            end
+            
+            it "should have delete links" do
+                get :index
+                response.should have_selector("a", :content => "delete")
+            end
+                                              
+        end
+                                              
+                                              
         describe "for signed-in users" do
             
             before(:each) do
@@ -52,6 +67,12 @@ describe UsersController do
                 response.should have_selector("a", :href => "/users?page=2",
                                               :content => "Next")
             end
+            
+            it "should not have delete links for non-admins" do
+                get :index
+                response.should_not have_selector("a", :content => "delete")
+            end
+                                            
         end
     end
     
@@ -87,6 +108,33 @@ describe UsersController do
         response.should have_selector("h1>img", :class => "gravatar")
         end
         
+        
+        
+        # This does not test wheter a user can see the delete links on HIS/HER page    
+    it "should not allow a user to delete other user's posts" do
+        get :show, :id => @user
+            response.should_not have_selector("a", :content => "delete")
+        end
+        
+    it "should paginate microposts (if there are any)" do
+        get :show, :id => @user
+        
+        if @user.microposts.count > 30
+        response.should have_selector("div.pagination")
+        
+        # This line means that the microposts don't go to the negatives
+        response.should have_selector("span.disabled", :content => "Previous")
+        
+        response.should have_selector("a", :content => "Next")
+        else
+            response.should_not have_selector("div.pagination")
+            response.should_not have_selector("span.disabled", :content => "Previous")
+            response.should_not have_selector("a", :content => "Next")
+            
+        end
+            
+    end
+        
     it "should show the user's microposts" do
         mp1 = Factory(:micropost, :user => @user, :content => "Foo bar")
         mp2 = Factory(:micropost, :user => @user, :content => "Baz quux")
@@ -94,7 +142,12 @@ describe UsersController do
         response.should have_selector("span.content", :content => mp1.content)
         response.should have_selector("span.content", :content => mp2.content)
         end
+        
+    it "should show how many microposts a user has made" do
+        get :show, :id => @user
+        response.should have_selector("strong", :content => "Microposts")
     end
+end
         
     
     describe "GET 'edit'" do
@@ -124,17 +177,40 @@ describe UsersController do
 
 
   describe "GET 'new'" do
-    it "should be successful" do
-      get 'new'
-      response.should be_success
-    end
+      
+     it "should be successful" do
+          get 'new'
+          response.should be_success
+     end
 
-  it "should have the right title" do
-	get 'new'
-	response.should have_selector("title", :content => "Sign up")
-	end
+     it "should have the right title" do
+         get 'new'
+         response.should have_selector("title", :content => "Sign up")
+     end
+      
+     it "should have a name field" do
+          get :new
+          response.should have_selector("input[name='user[name]'][type='text']")
+     end
+      
+      it "should have an email field" do
+          get :new
+          response.should have_selector("input[name='user[email]'][type='text']")
+      end
+      
+      
+      it "should have a password field" do
+          get :new
+          response.should have_selector("input[name='user[password]'][type='password']")
+      end
+      
+      it "should have a password confirmation field" do
+          get:new
+          response.should have_selector("input[name='user[password_confirmation]'][type='password']")
+      end
   end
 
+    
     describe "POST 'create'" do
         
         describe "failure" do
@@ -320,6 +396,16 @@ describe UsersController do
             it "should redirect to the users page" do
                 delete :destroy, :id => @user
                 response.should redirect_to(users_path)
+            end
+            
+            
+            #In order for an admin to be treated as one, it must be test_sign(ed)_in
+            it "should not allow the admin to delete itself" do
+                lambda do
+                    admin_perm = Factory(:user, :email => "admin_1@example.com", :admin => true)
+                    test_sign_in(admin_perm)
+                    delete :destroy, :id => admin_perm
+                end.should_not change(User, :count).by(-1)
             end
         end
     end

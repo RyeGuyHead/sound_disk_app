@@ -3,10 +3,19 @@ class MicropostsController < ApplicationController
     before_filter :authenticate, :only => [:create, :destroy]
     before_filter :authorized_user, :only => :destroy
     
+    
+    def index
+       @title = "All posts"
+       @user = User.find(params[:id])
+       render 'users/posts' 
+    end
+    
+    
     def create
         @micropost = current_user.microposts.build(params[:micropost])
         if @micropost.save
             flash[:success] = "Micropost created!"
+            #wrap(@micropost)
             redirect_to root_path
             else
             @feed_items = []

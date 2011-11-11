@@ -1,0 +1,23 @@
+<h1>About Us</h1>
+<p>
+Hello! My name is Ryan Johnson, and I created this site with help from
+the Ruby on Rails tutorial and my time spent working with the Argo Navis
+Consulting team. 
+</p>
+
+<p>
+The hope of this site is to create a forum for users to talk about and share
+their music of all shapes and styles. I have been a long time Newgrounder, and
+my time there has highlighted the importance of feedback and collaboration in
+terms of an audio standpoint. My goal is to make working and learning from otherartists as simple and fun as possible.
+</p>
+
+<p>
+I will also use this space as a means of releasing some of my other coding
+projects, in particular, my user-input music generator. As of now, it is in Java
+and only plays audio as feedback. But I'm learning how to properly create a midifile, so a second version written in C++ will be available for open source download and collaboration within the next year.
+</p>
+
+<p>
+Thanks for coming to my site, and I hope you enjoy your stay :)
+</p>

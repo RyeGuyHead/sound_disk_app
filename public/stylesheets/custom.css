@@ -3,16 +3,17 @@
 }
 
 body {
-  background: #cff;
+  background: #181818;
 }
 
 header {
   padding-top: 20px;
+  width: 710px;
 }
 
 header img {
   padding: 1em;
-  background: #fff;
+  background: #181818;
 }
 
 section {
@@ -121,7 +122,8 @@ td.sidebar {
   width: 30%;
   padding: 1em;
   vertical-align: top;
-  background: #ffc;
+  background: #fafa0a;
+  border: 2em;
 }
 
 .profile img.gravatar {

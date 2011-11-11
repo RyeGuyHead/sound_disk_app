@@ -1,0 +1,35 @@
+class Song < ActiveRecord::Base
+	belongs_to :user 
+	validates :user_id, :presence => true
+	
+
+	# For song.save[params :data]
+	def self.save(upload)
+		name = upload['songfile'].original_filename
+		directory = "public/data"
+		path = File.join(directory, name)
+		File.open(path, "wb") { |f| f.write(upload['songfile'].read) }
+	end
+
+
+	def self.uploaded_file=(incoming_file)
+		self.filename = incoming_file.original_file_name
+		# self.content_type = incoming_file.content_type
+		# Could be useful for checking for valid file types
+		self.data = incoming_file.read
+	end
+
+	def filename=(new_filename)
+	#	write_attribute("filename", sanitize_filename(new_filename))
+		#	gsub is not recognized
+		write_arrtibute("filename", new_filename)
+	end
+
+
+	# Removes ugly path characters, but not working at the moment
+	private
+	def sanitize_filename(filename)
+		just_filename = File.basename(filename)
+	#	just_filename.gsub(/[^\w\.\-]/, '_')
+	end
+end

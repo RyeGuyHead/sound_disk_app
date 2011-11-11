@@ -1,0 +1,23 @@
+<p>
+Upload a song, melody, drum beat, ambient noise...whatever you want! Someone will find a use for it...maybe.
+</p>
+
+<% form_tag 'create', :multipart => true do %>
+	<%= label_tag(:title, "Title") %>
+	<div class = "field">
+	<%= text_field_tag(:title) %>
+	</div>
+	<br>
+	<%= label_tag(:genre, "Genre") %>
+	<div class = "field">
+	<%= text_field_tag(:genre) %>
+	</div>
+	<br>
+	<%= label_tag(:data, "File") %>
+	<div class = "field">
+	<%= file_field_tag(:data) %>
+	</div>
+	<div class = "actions">
+	<%= submit_tag 'Upload' %>
+	</div>
+	<%end%>	

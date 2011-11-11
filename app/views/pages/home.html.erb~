@@ -1,0 +1,30 @@
+<% if signed_in? %>
+  <table class="front" summary="For signed-in users">
+    <tr>
+      <td class="main">
+        <h1 class="micropost">Blog Space</h1>
+	<%= render 'shared/micropost_form' %>
+	<h1>Other Options</h1>
+	<br>
+	<h1><li><%=link_to "Upload a song", songs_path %></li></h1>
+
+
+        <%= render 'shared/feed' %>
+       </td>
+        <td class="sidebar round">
+        <%= render 'shared/user_info' %>
+        <%= render 'shared/stats' %>
+        </td>
+</tr>
+</table>
+
+
+<% else %>
+  <h1>Music Programmer App</h1>
+
+  <p>
+    Welcome to the music-coders community!
+  </p>
+
+  <%= link_to "Sign up now!", signup_path, :class => "signup_button round" %>
+<% end %>

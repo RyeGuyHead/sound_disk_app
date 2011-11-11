@@ -4,8 +4,26 @@ describe PagesController do
     render_views
     
     before(:each) do
-        @base_title = "Ruby on Rails Tutorial Sample App"
+        @base_title = "Music Coders Project"
     end
+    
+    
+    describe "Get 'help'" do
+        before(:each) do
+            get :help
+            end
+        
+        it "should have a help page" do
+            response.should be_success
+            end
+        
+        it "should have the right title" do
+            response.should have_selector("title", :content => "#{@base_title} | Help")
+            end
+        end
+    
+
+
     
     describe "GET 'home'" do
         
@@ -40,6 +58,13 @@ describe PagesController do
                 response.should have_selector("a", :href => followers_user_path(@user),
                                               :content => "1 follower")
             end
+            
+            it "should display how many microposts you've made" do
+                get :home
+                #posts = pluralize(@user.microposts.count, "micropost")
+                response.should have_selector("a", :content => "microposts" )
+            end
+            
         end
     end
     
